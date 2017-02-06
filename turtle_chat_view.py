@@ -46,13 +46,15 @@ class TextBox(TextInput):
     def draw_box(self):
         self.pos=(-200,-200)
         turtle.hideturtle()
-        self.writer.goto(self.pos)
-        self.writer.pendown()
-        self.writer.goto(pos.xpos-height,pos.ypos)
-        self.writer.goto(pos.xpos,pos.ypos+width)
-        self.writer.goto(pos.xpos+height,pos.ypos)
-        self.writer.goto(pos.xpos,pos.ypos-width)
-        self.writer.goto(self.pos)
+        self.drawer = turtle.clone()
+        self.drawer.penup()
+        self.drawer.goto(self.pos)
+        self.drawer.pendown()
+        self.drawer.goto(self.drawer.pos[0]-height,pos.pos[1])
+        self.drawer.goto(self.drawer.pos[0],pos.pos[1]+width)
+        self.drawer.goto(self.drawer.pos[0]+height,pos.pos[1])
+        self.drawer.goto(self.drawer.pos[0],pos.pos[1]-width)
+        self.drawer.goto(self.pos)
 
     def write_msg(self):
         self.writer.write(input())
@@ -79,7 +81,7 @@ class TextBox(TextInput):
 class SendButton(Button):
     def __init__(self,view):    
         def fun(self,x=None,y=None):
-            Client.send(self.get_msg())
+            self.send(self.get_msg())
             
 
 #####################################################################################
@@ -94,7 +96,7 @@ class SendButton(Button):
 #Read the comments below for hints and directions.
 ##################################################################
 ##################################################################
-class View:
+class View():
     _MSG_LOG_LENGTH=5 #Number of messages to retain in view
     _SCREEN_WIDTH=300
     _SCREEN_HEIGHT=600
@@ -109,15 +111,15 @@ class View:
         #Store the username and partner_name into the instance.
         ###
 
-        username=self.username
-        partner_name=self.partner_name
+        self.username = username
+        self.partner_name = partner_name
 
         ###
         #Make a new Client object and store it in this instance of View
         #(i.e. self).  The name of the instance should be my_client
         ###
 
-        my_client=self.Client
+        my_client = Client()
 
         ###
         #Set screen dimensions using turtle.setup
@@ -130,6 +132,9 @@ class View:
         #at the Python shell.
         ###
 
+        turtle.setup(1920,1018)
+        TextBox()
+
         ###
         #This list will store all of the messages.
         #You can add strings to the front of the list using
@@ -138,6 +143,8 @@ class View:
         #   self.msg_queue.append(a_msg_string)
         self.msg_queue=[]
         ###
+
+        self.msg_queue.insert(0,)
 
         ###
         #Create one turtle object for each message to display.
