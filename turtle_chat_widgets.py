@@ -56,14 +56,13 @@ class Button(metaclass=ABCMeta):
         :param y: integer, vertical coordinate of click in pixels (required for onclick)
                   Default=None
         '''
-        pass
 
 class TextInput(metaclass=ABCMeta):
     '''
     This class sets up a textbox to take live text input from
     the user via keyboard listeners.
     '''
-    def __init__(self, width=200, height=100, pos=(0,0), background_gif=None, letters_per_line=40,view=None):
+    def __init__(self, width=500, height=50, pos=(0,0), background_gif=None, letters_per_line=800,view=None):
         '''
         Initialize TextInput object.
 
@@ -101,7 +100,6 @@ class TextInput(metaclass=ABCMeta):
         will draw textbox.  Can use instance attributes,
         pos, width, and height.
         '''
-        pass
 
     @abstractmethod
     def write_msg(self):
@@ -116,7 +114,6 @@ class TextInput(metaclass=ABCMeta):
         Side effect method - no inputs or outputs, but
         new_msg may be changed.
         '''
-        pass
 
     def clear_msg(self):
         '''
