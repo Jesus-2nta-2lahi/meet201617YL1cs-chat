@@ -7,7 +7,7 @@ class Button(metaclass=ABCMeta):
 
     The abstract method, fun, is called when the button is clicked on.
     '''
-    def __init__(self,my_turtle=None,shape=None,pos=(0,0)):
+    def __init__(self,my_turtle=None,shape=None,pos=(0,0),view=None):
         '''
         Initialize Button object.  The button will be given an onclick
         listener that triggers the implementation of the abstract method, fun.
@@ -23,6 +23,7 @@ class Button(metaclass=ABCMeta):
                     turtle object.
         '''
         print('test')
+        self.view = view
         if my_turtle is None :
             #If no turtle given, create new one
             self.turtle=turtle.clone()
@@ -36,7 +37,7 @@ class Button(metaclass=ABCMeta):
 
         if shape is None:
             self.turtle.shape('square')
-            self.turtle.shapesize(2,10)
+            self.turtle.shapesize(2,2)
         else:
             turtle.addshape(shape)
             self.turtle.shape(shape)
@@ -86,7 +87,7 @@ class TextInput(metaclass=ABCMeta):
         self.writer.hideturtle()
         self.writer.penup()
         #Move writer to location where text starts.
-        self.writer.goto(-self.width/2+10+self.pos[0],self.pos[1]-self.height/2+20)
+        self.writer.goto(-self.width/2+10+self.pos[0],self.pos[1]-self.height/2+40)
 
         #Setup listeners
         self.setup_listeners()
@@ -150,8 +151,8 @@ class TextInput(metaclass=ABCMeta):
         #Punctuation, etc.
         turtle.onkeypress( self.add_comma, 'comma' )
         turtle.onkeypress( self.add_period, 'period' )
-        turtle.onkeypress( self.add_exclaim, 'exclam' ) #Yes, exclam
-        turtle.onkeypress( self.add_colon, 'colon' )
+        turtle.onkeypress( self.add_exclaim, 'exclam' ) #Yes, exclam ##Sick Englishs
+        turtle.onkeypress( self.add_colon, 'colon' )    #Butt, I remember things.
         turtle.onkeypress( self.add_dollar, 'dollar' )
         turtle.onkeypress( self.add_dblquote,'quotedbl')
         turtle.onkeypress( self.add_quoteright,'quoteright')
@@ -456,7 +457,7 @@ class TextInput(metaclass=ABCMeta):
         self.write_msg()
         print(self.new_msg)
     def backspace(self):
-        self.new_msg=self.new_msg[0:-1] #Remove last character
+        self.new_msg=self.new_msg[0:-1] #Remove last character ##Not working properly (yet...)
         self.write_msg()
         print(self.new_msg)
     def add_dollar(self):

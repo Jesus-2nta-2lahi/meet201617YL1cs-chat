@@ -47,7 +47,7 @@ class TextBox(TextInput):
         turtle.hideturtle()
         self.drawer = turtle.clone()
         self.drawer.pu()
-        self.drawer.goto(0,-400)
+        self.drawer.goto(self.pos)
         pos = self.drawer.position()
         self.drawer.pendown()
         self.drawer.setx(pos[0]+ self.width/2)
@@ -57,8 +57,7 @@ class TextBox(TextInput):
         self.drawer.setx(pos[0])
 
     def write_msg(self):
-        self.writer.goto(0,0)
-        self.writer.write("amir")
+        self.writer.write(self.new_msg)
 
 #####################################################################################
 
@@ -80,9 +79,9 @@ class TextBox(TextInput):
 #####################################################################################
 
 class SendButton(Button):
-    def __init__(self,view):    
-        def fun(self,x=None,y=None):
-            self.send(self.get_msg())
+    def fun(self,x=None,y=None):
+        Client.send(Client(),new_msg)    #UNCERTAIN OF THOSE TWO LINES
+        Client.receive(Client())            #how am I supposed to stimulate a different class's self attribute??
             
 
 #####################################################################################
@@ -97,7 +96,7 @@ class SendButton(Button):
 #Read the comments below for hints and directions.
 ##################################################################
 ##################################################################
-class View():
+class View:
     _MSG_LOG_LENGTH=5 #Number of messages to retain in view
     _SCREEN_WIDTH=300
     _SCREEN_HEIGHT=600
@@ -120,7 +119,7 @@ class View():
         #(i.e. self).  The name of the instance should be my_client
         ###
 
-        my_client = Client()
+        self.my_client = Client()
 
         ###
         #Set screen dimensions using turtle.setup
@@ -133,8 +132,9 @@ class View():
         #at the Python shell.
         ###
 
-        turtle.setup(1920,1018)
+        turtle.setup(self._SCREEN_WIDTH,self._SCREEN_HEIGHT)
         TextBox()
+        SendButton()
 
         ###
         #This list will store all of the messages.
@@ -142,10 +142,9 @@ class View():
         #   self.msg_queue.insert(0,a_msg_string)
         #or at the end of the list using
         #   self.msg_queue.append(a_msg_string)
-        self.msg_queue=[]
         ###
 
-        self.msg_queue.insert(0,)
+        self.msg_queue=[]
 
         ###
         #Create one turtle object for each message to display.
@@ -173,7 +172,11 @@ class View():
         It should call self.display_msg() to cause the message
         display to be updated.
         '''
-        pass
+
+        self.msg_queue.insert(0,TextBox().new_msg)                                                                                                                                                 
+        Client.send(TextBox.new_msg)
+        TextBox.Clear_msg(TextBox())
+        self.display_msg()
 
     def get_msg(self):
         return self.textbox.get_msg()
@@ -191,7 +194,8 @@ class View():
 
         Then, it can call turtle.listen()
         '''
-        pass
+        self.send_btn.fun() #Probably very wrong
+        turtle.listen()
 
     def msg_received(self,msg):
         '''
