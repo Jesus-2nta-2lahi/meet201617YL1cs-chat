@@ -7,7 +7,7 @@ class Button(metaclass=ABCMeta):
 
     The abstract method, fun, is called when the button is clicked on.
     '''
-    def __init__(self,my_turtle=None,shape=None,pos=(0,0),view=None):
+    def __init__(self,my_turtle=None,shape=None,pos=(0,0)):
         '''
         Initialize Button object.  The button will be given an onclick
         listener that triggers the implementation of the abstract method, fun.
@@ -23,7 +23,6 @@ class Button(metaclass=ABCMeta):
                     turtle object.
         '''
         print('test')
-        self.view = view
         if my_turtle is None :
             #If no turtle given, create new one
             self.turtle=turtle.clone()
@@ -457,7 +456,7 @@ class TextInput(metaclass=ABCMeta):
         self.write_msg()
         print(self.new_msg)
     def backspace(self):
-        self.new_msg=self.new_msg[0:-1] #Remove last character ##Not working properly (yet...)
+        self.new_msg=self.new_msg[0:-1] #Remove last character
         self.write_msg()
         print(self.new_msg)
     def add_dollar(self):

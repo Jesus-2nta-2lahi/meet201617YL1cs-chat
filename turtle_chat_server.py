@@ -1,4 +1,4 @@
-# Server for turtle_chat
+ # Server for turtle_chat
 import sys, socket, select
 
 DEFAULT_HOST = 'localhost'

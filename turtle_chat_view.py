@@ -57,7 +57,10 @@ class TextBox(TextInput):
         self.drawer.setx(pos[0])
 
     def write_msg(self):
+        self.writer.clear()
         self.writer.write(self.new_msg)
+##        if len(self.new_msg) > 39:
+##            self.new_msg += "/r"
 
 #####################################################################################
 
@@ -79,9 +82,11 @@ class TextBox(TextInput):
 #####################################################################################
 
 class SendButton(Button):
+    def __init__(self,my_turtle=None,shape=None,pos=(0,0),view = None):
+        super(SendButton,self).__init__(my_turtle,shape,pos)
+        self.view = view
     def fun(self,x=None,y=None):
-        Client.send(Client(),new_msg)    #UNCERTAIN OF THOSE TWO LINES
-        Client.receive(Client())            #how am I supposed to stimulate a different class's self attribute??
+        self.view.send_msg()
             
 
 #####################################################################################
@@ -104,7 +109,7 @@ class View:
 
     def __init__(self,username='Me',partner_name='Partner'):
         '''
-        :param username: the name of this chat user
+'        :param username: the name of this chat user
         :param partner_name: the name of the user you are chatting with
         '''
         ###
