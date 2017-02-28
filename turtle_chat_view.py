@@ -59,8 +59,6 @@ class TextBox(TextInput):
     def write_msg(self):
         self.writer.clear()
         self.writer.write(self.new_msg)
-##        if len(self.new_msg) > 39:
-##            self.new_msg += "/r"
 
 #####################################################################################
 
@@ -82,11 +80,12 @@ class TextBox(TextInput):
 #####################################################################################
 
 class SendButton(Button):
-    def __init__(self,my_turtle=None,shape=None,pos=(0,0),view = None):
+    def __init__(self,my_turtle=None,shape=None,pos=(0,-220),view = None):
         super(SendButton,self).__init__(my_turtle,shape,pos)
-        self.view = view
     def fun(self,x=None,y=None):
+        self.view = View()
         self.view.send_msg()
+        
             
 
 #####################################################################################
@@ -178,9 +177,11 @@ class View:
         display to be updated.
         '''
 
-        self.msg_queue.insert(0,TextBox().new_msg)                                                                                                                                                 
+        self.msg_queue.insert(0,TextBox.new_msg) #how do I use new_msg??
         Client.send(TextBox.new_msg)
-        TextBox.Clear_msg(TextBox())
+        TextBox.clear_msg(TextBox)
+        TextBox.writer.clear()
+        TextBox.writer.write(TextBox().new_msg)
         self.display_msg()
 
     def get_msg(self):
@@ -199,7 +200,7 @@ class View:
 
         Then, it can call turtle.listen()
         '''
-        self.send_btn.fun() #Probably very wrong
+        self.send_btn.fun()
         turtle.listen()
 
     def msg_received(self,msg):
