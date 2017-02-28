@@ -59,8 +59,6 @@ class TextBox(TextInput):
     def write_msg(self):
         self.writer.clear()
         self.writer.write(self.new_msg)
-##        if len(self.new_msg) > 39:
-##            self.new_msg += "/r"
 
 #####################################################################################
 
@@ -82,11 +80,16 @@ class TextBox(TextInput):
 #####################################################################################
 
 class SendButton(Button):
+<<<<<<< HEAD
     def __init__(self,my_turtle=None,shape=None,pos=(0,-260),view = None):
+=======
+    def __init__(self,my_turtle=None,shape=None,pos=(0,-220),view = None):
+>>>>>>> 679ca79d8069915c6703eaa99f92e49dd5e9fa5a
         super(SendButton,self).__init__(my_turtle,shape,pos)
-        self.view = view
     def fun(self,x=None,y=None):
+        self.view = View()
         self.view.send_msg()
+        
             
 
 #####################################################################################
@@ -179,7 +182,6 @@ class View:
         It should call self.display_msg() to cause the message
         display to be updated.
         '''
-
         self.msg_queue.insert(0,self.text_box.new_msg)                                                                                                                                                
         self.my_client.send(self.text_box.new_msg)
         self.text_box.clear_msg()
