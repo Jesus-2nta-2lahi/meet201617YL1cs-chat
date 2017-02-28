@@ -82,7 +82,7 @@ class TextBox(TextInput):
 #####################################################################################
 
 class SendButton(Button):
-    def __init__(self,my_turtle=None,shape=None,pos=(0,0),view = None):
+    def __init__(self,my_turtle=None,shape=None,pos=(0,-260),view = None):
         super(SendButton,self).__init__(my_turtle,shape,pos)
         self.view = view
     def fun(self,x=None,y=None):
@@ -138,8 +138,6 @@ class View:
         ###
 
         turtle.setup(self._SCREEN_WIDTH,self._SCREEN_HEIGHT)
-        TextBox()
-        SendButton()
 
         ###
         #This list will store all of the messages.
@@ -161,11 +159,15 @@ class View:
         #Create a TextBox instance and a SendButton instance and
         #Store them inside of this instance
         ###
+        
+        self.text_box = TextBox()
+        self.send_button = SendButton(view = self)
 
         ###
         #Call your setup_listeners() function, if you have one,
         #and any other remaining setup functions you have invented.
         ###
+        self.setup_listeners()
 
     def send_msg(self):
         '''
@@ -178,9 +180,9 @@ class View:
         display to be updated.
         '''
 
-        self.msg_queue.insert(0,TextBox().new_msg)                                                                                                                                                 
-        Client.send(TextBox.new_msg)
-        TextBox.Clear_msg(TextBox())
+        self.msg_queue.insert(0,self.text_box.new_msg)                                                                                                                                                
+        self.my_client.send(self.text_box.new_msg)
+        self.text_box.clear_msg()
         self.display_msg()
 
     def get_msg(self):
@@ -199,7 +201,7 @@ class View:
 
         Then, it can call turtle.listen()
         '''
-        self.send_btn.fun() #Probably very wrong
+        self.send_button.fun()
         turtle.listen()
 
     def msg_received(self,msg):
