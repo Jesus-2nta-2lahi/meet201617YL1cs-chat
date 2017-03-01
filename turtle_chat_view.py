@@ -80,14 +80,10 @@ class TextBox(TextInput):
 #####################################################################################
 
 class SendButton(Button):
-<<<<<<< HEAD
     def __init__(self,my_turtle=None,shape=None,pos=(0,-260),view = None):
-=======
-    def __init__(self,my_turtle=None,shape=None,pos=(0,-220),view = None):
->>>>>>> 679ca79d8069915c6703eaa99f92e49dd5e9fa5a
         super(SendButton,self).__init__(my_turtle,shape,pos)
+        self.view = view
     def fun(self,x=None,y=None):
-        self.view = View()
         self.view.send_msg()
         
             
@@ -157,13 +153,23 @@ class View:
         #You can use the clear() and write() methods to erase
         #and write messages for each
         ###
+        
+        self.turtle_pos = (-100, 200)
+        self.msg_queue_turts = []
+        for i in range(len(self.msg_queue)):
+            self.t_dawg = turtle.clone()
+            self.t_dawg.hideturtle()
+            self.t_dawg.goto(self.turtle_pos)
+            self.msg_queue_turts.append(self.t_dawg)
+            print(self.msg_queue_turts)
+            
 
         ###
         #Create a TextBox instance and a SendButton instance and
         #Store them inside of this instance
         ###
         
-        self.text_box = TextBox()
+        self.textbox = TextBox()
         self.send_button = SendButton(view = self)
 
         ###
@@ -182,9 +188,9 @@ class View:
         It should call self.display_msg() to cause the message
         display to be updated.
         '''
-        self.msg_queue.insert(0,self.text_box.new_msg)                                                                                                                                                
-        self.my_client.send(self.text_box.new_msg)
-        self.text_box.clear_msg()
+        self.msg_queue.insert(0,self.textbox.new_msg)                                                                                                                                                
+        self.my_client.send(self.textbox.new_msg)
+        self.textbox.clear_msg()
         self.display_msg()
 
     def get_msg(self):
@@ -196,8 +202,7 @@ class View:
         '''
         Set up send button - additional listener, in addition to click,
         so that return button will send a message.
-        To do this, you will use the turtle.onkeypress function.
-        The function that it will take is
+        To do this, you will use the turtle.onkeypress function.        The function that it will take is
         self.send_btn.fun
         where send_btn is the name of your button instance
 
@@ -205,6 +210,8 @@ class View:
         '''
         self.send_button.fun()
         turtle.listen()
+
+        
 
     def msg_received(self,msg):
         '''
@@ -219,16 +226,23 @@ class View:
         show_this_msg=self.partner_name+' says:\r'+ msg
         #Add the message to the queue either using insert (to put at the beginning)
         #or append (to put at the end).
-        #
+
+        self.msg_queue.insert(0,self.textbox.new_msg)                                                                                                                                                
+    
         #Then, call the display_msg method to update the display
+
+        self.displat_msg()
 
     def display_msg(self):
         '''
         This method should update the messages displayed in the screen.
         You can get the messages you want from self.msg_queue
         '''
-        pass
 
+        for i in range(len(self.msg_queue_turts)):
+            self.msg_queue_turts[i].goto(self.msg_queue_turts[i].position[0],self.msg_queue_turts[i].position[1] - self._LINE_SPACING)
+            self.msg_queue_turts[i].write(self.msg_queue[i])
+        
     def get_client(self):
         return self.my_client
 ##############################################################
