@@ -94,6 +94,7 @@ class TextInput(metaclass=ABCMeta):
         #Draw box to surround text field
         self.draw_box()
 
+
     @abstractmethod
     def draw_box(self):
         '''

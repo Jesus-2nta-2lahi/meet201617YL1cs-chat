@@ -101,10 +101,11 @@ class SendButton(Button):
 ##################################################################
 ##################################################################
 class View:
-    _MSG_LOG_LENGTH=15 #Number of messages to retain in view
+    _MSG_LOG_LENGTH=10 #Number of messages to retain in view
     _SCREEN_WIDTH=500
     _SCREEN_HEIGHT=800
     _LINE_SPACING=round(_SCREEN_HEIGHT/1.4/(_MSG_LOG_LENGTH+1))
+    _GAME_SPOT = (1200,-300)
 
     def __init__(self,username='Me',partner_name='Partner'):
         '''
@@ -163,7 +164,7 @@ class View:
             self.t_dawg.hideturtle()
             self.t_dawg.goto( self.turt_pos[0], self.turt_pos[1] + self._LINE_SPACING * j)
             self.msg_queue_turts.append(self.t_dawg)
-            print(self.msg_queue_turts)
+##            print(self.msg_queue_turts)
 
         ###
         #Create a TextBox instance and a SendButton instance and
@@ -179,6 +180,21 @@ class View:
         ###
         self.setup_listeners()
 
+    def game(self):
+##        for i in range(len(self.msg_que_turts)):
+##            self.msg_que_turts[i].clear()
+        self.game_turt = turtle.clone()
+        self.game_turt.ht()
+        self.game_turt.pu()
+        self.game_turt.goto(-200,300)
+        pos = self.game_turt.position()
+        self.game_turt.pd()
+        self.game_turt.goto(pos[0] + 400,pos[1])
+        self.game_turt.goto(pos[0] + 400,pos[1] - 500)
+        self.game_turt.goto(pos[0],pos[1] - 500)
+        self.game_turt.goto(pos[0],pos[1])
+        self.game_turt.pu()
+
     def send_msg(self):
         '''
         You should implement this method.  It should call the
@@ -188,7 +204,13 @@ class View:
         clear the textbox text display (hint: use the clear_msg method).
         It should call self.display_msg() to cause the message
         display to be updated.
-        '''
+    '''
+
+                
+        if(self.textbox.new_msg == "/start game"):
+            self.game()
+            self.textbox.new_msg = "game started!"
+        
         if(len(self.textbox.new_msg) > 0):
             self.msg_queue.insert(0,self.textbox.new_msg)                                                                                                                                                
             self.my_client.send(self.textbox.new_msg)
@@ -230,19 +252,19 @@ class View:
         #Add the message to the queue either using insert (to put at the beginning)
         #or append (to put at the end).
 
-        self.msg_queue.insert(0,self.textbox.new_msg)
-    
+        if len(self.textbox.new_msg) > 0 :
+                self.msg_queue.insert(0,show_this_msg)
+                self.display_msg()
+
         #Then, call the display_msg method to update the display
 
-        self.displat_msg()
 
     def display_msg(self):
         '''
         This method should update the messages displayed in the screen.
         You can get the messages you want from self.msg_queue
+        
         '''
-        if len(self.textbox.new_msg) > 0 :
-            self.msg_queue.insert(0,self.textbox.new_msg)
 
         if len(self.msg_queue) > self._MSG_LOG_LENGTH:
             del self.msg_queue[-1]
@@ -251,8 +273,8 @@ class View:
         for i in range(len(self.msg_queue_turts)):
             self.msg_queue_turts[i].clear()
             self.msg_queue_turts[i].write(self.msg_queue[i])
-            print(self.msg_queue)
-            print(self.msg_queue_turts)
+##            print(self.msg_queue)
+##            print(self.msg_queue_turts)
 
         self.msg_queue_turts = []
         
