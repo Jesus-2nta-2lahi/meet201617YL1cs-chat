@@ -36,7 +36,7 @@ class Button(metaclass=ABCMeta):
 
         if shape is None:
             self.turtle.shape('square')
-            self.turtle.shapesize(1,2)
+            self.turtle.shapesize(1,5)
         else:
             turtle.addshape(shape)
             self.turtle.shape(shape)
@@ -152,8 +152,8 @@ class TextInput(metaclass=ABCMeta):
         #Punctuation, etc.
         turtle.onkeypress( self.add_comma, 'comma' )
         turtle.onkeypress( self.add_period, 'period' )
-        turtle.onkeypress( self.add_exclaim, 'exclam' ) #Yes, exclam ##Sick Englishs
-        turtle.onkeypress( self.add_colon, 'colon' )    #Butt, I remember things.
+        turtle.onkeypress( self.add_exclaim, 'exclam' ) 
+        turtle.onkeypress( self.add_colon, 'colon' )    
         turtle.onkeypress( self.add_dollar, 'dollar' )
         turtle.onkeypress( self.add_dblquote,'quotedbl')
         turtle.onkeypress( self.add_quoteright,'quoteright')

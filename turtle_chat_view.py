@@ -104,8 +104,10 @@ class View:
     _MSG_LOG_LENGTH=10 #Number of messages to retain in view
     _SCREEN_WIDTH=500
     _SCREEN_HEIGHT=800
-    _LINE_SPACING=round(_SCREEN_HEIGHT/1.4/(_MSG_LOG_LENGTH+1))
-    _GAME_SPOT = (1200,-300)
+    _LINE_SPACING=50
+    _GAME_SPOT = (1200,-300)    
+    scroll_shift = 0 
+
 
     def __init__(self,username='Me',partner_name='Partner'):
         '''
@@ -155,16 +157,9 @@ class View:
         #and write messages for each
         ###
         
-        self.msg_queue_turts = []
-
-        self.turt_pos = (-150,-160)
-        for j in range(self._MSG_LOG_LENGTH):
-            self.t_dawg = turtle.clone()
-            self.t_dawg.penup()
-            self.t_dawg.hideturtle()
-            self.t_dawg.goto( self.turt_pos[0], self.turt_pos[1] + self._LINE_SPACING * j)
-            self.msg_queue_turts.append(self.t_dawg)
-##            print(self.msg_queue_turts)
+        self.turty = turtle.clone()
+        self.turty.penup()
+        self.turty.hideturtle()
 
         ###
         #Create a TextBox instance and a SendButton instance and
@@ -181,8 +176,6 @@ class View:
         self.setup_listeners()
 
     def game(self):
-##        for i in range(len(self.msg_que_turts)):
-##            self.msg_que_turts[i].clear()
         self.game_turt = turtle.clone()
         self.game_turt.ht()
         self.game_turt.pu()
@@ -206,12 +199,14 @@ class View:
         display to be updated.
     '''
 
-                
-        if(self.textbox.new_msg == "/start game"):
-            self.game()
-            self.textbox.new_msg = "game started!"
+##      print(self.textbox.new_msg) #aha
         
-        if(len(self.textbox.new_msg) > 0):
+        if(self.textbox.new_msg == "/start game"):
+            self.textbox.new_msg = "game started!"
+            self.game()
+
+        if len(self.textbox.new_msg) > 0:
+            self.textbox.new_msg = "You:\r" + self.textbox.new_msg
             self.msg_queue.insert(0,self.textbox.new_msg)                                                                                                                                                
             self.my_client.send(self.textbox.new_msg)
             self.textbox.clear_msg()
@@ -220,7 +215,6 @@ class View:
     def get_msg(self):
         return self.textbox.get_msg()
 
-    
 
     def setup_listeners(self):
         '''
@@ -233,6 +227,25 @@ class View:
 
         Then, it can call turtle.listen()
         '''
+
+        #SCROLL
+        turtle.onkeypress( self.up_arrow, 'Up' )
+        turtle.onkeypress( self.down_arrow, 'Down' )
+        
+
+    def up_arrow(self):
+##        print("up")
+        if self.scroll_shift < len(self.msg_queue) - 1:
+            self.scroll_shift += 1
+            self.display_msg(self.scroll_shift)
+
+    def down_arrow(self):
+##        print("down")
+        if self.scroll_shift > 0:
+            self.scroll_shift -= 1
+            self.display_msg(self.scroll_shift)
+        
+        
         self.send_button.fun()
         turtle.listen()
 
@@ -252,31 +265,32 @@ class View:
         #Add the message to the queue either using insert (to put at the beginning)
         #or append (to put at the end).
 
-        if len(self.textbox.new_msg) > 0 :
-                self.msg_queue.insert(0,show_this_msg)
-                self.display_msg()
+
+        self.msg_queue.insert(0,show_this_msg)
+        self.display_msg()
 
         #Then, call the display_msg method to update the display
 
 
-    def display_msg(self):
+    def display_msg(self, scroll = 0):
         '''
         This method should update the messages displayed in the screen.
         You can get the messages you want from self.msg_queue
         
         '''
+        pos = (-150,-230)
 
-        if len(self.msg_queue) > self._MSG_LOG_LENGTH:
-            del self.msg_queue[-1]
-            print(self.msg_queue)
-            
-        for i in range(len(self.msg_queue_turts)):
-            self.msg_queue_turts[i].clear()
-            self.msg_queue_turts[i].write(self.msg_queue[i])
+        self.turty.clear()
+
+        for i in range(scroll,len(self.msg_queue)):
+            print(" i === " + str(i) + "  scroll === " + str(scroll))
+            if len(self.msg_queue) >= i+scroll :
+                print(i)
+                print(scroll)
+                self.turty.goto(pos[0],pos[1] + self._LINE_SPACING * (i - scroll +1))
+                self.turty.write(self.msg_queue[i])
 ##            print(self.msg_queue)
 ##            print(self.msg_queue_turts)
-
-        self.msg_queue_turts = []
         
     def get_client(self):
         return self.my_client
